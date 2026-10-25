@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% load ui %}{% block robots %}<meta name="robots" content="noindex">{% endblock %}{% block content %}
+<h1 style="font-size:clamp(1.5rem,4vw,2.2rem);margin:.6em 0 0">Pay with M-Pesa</h1><p class="mute" style="margin:4px 0 0">Secure checkout. Your slot is held while you pay.</p>
+<div class="twocol">
+  <div class="card"><h2>Booking details</h2><div class="shead">{% if booking.business.logo %}<img class="avatar" src="{{ booking.business.logo.url|cdn:'w_104,h_104,c_fill' }}" alt="">{% endif %}<div><strong>{{ booking.service_name }}</strong><div class="mute">{{ booking.business.name }}</div><div class="mute">{{ booking.start|date:"D j M, H:i" }}</div></div></div>
+  <div class="sum"><div class="r"><span class="mute">Service price</span><span>KSh {{ booking.price|floatformat:0 }}</span></div><div class="r"><span class="mute">Deposit due now</span><strong class="accent">KSh {{ booking.deposit_amount|floatformat:0 }}</strong></div><div class="r total"><span>Balance at the salon</span><span>KSh {{ booking.balance|floatformat:0 }}</span></div></div>
+  {% if booking.status == 'PENDING_PAYMENT' and booking.expires_at %}<p class="mute" style="margin:0"> Slot held for {{ booking.expires_at|timeuntil }}.</p>{% endif %}</div>
+  <div class="card"><h2>M-Pesa payment</h2>{% if error %}<div class="msg bad" style="margin-top:0">{{ error }}</div>{% endif %}
+  {% if booking.status == 'PENDING_PAYMENT' %}<form method="post">{% csrf_token %}<label for="phone">M-Pesa number</label><input id="phone" name="phone" value="{{ booking.contact_phone }}" inputmode="tel" required><button class="block">Pay KSh {{ booking.deposit_amount|floatformat:0 }}</button></form>
+  <div style="margin-top:18px"><div class="pstep"><i>1</i><span>You'll get an M-Pesa prompt on your phone.</span></div><div class="pstep"><i>2</i><span>Enter your M-Pesa PIN there. We never see it.</span></div><div class="pstep"><i>3</i><span>Your booking confirms automatically.</span></div></div>
+  {% else %}<p class="bad">This booking is {{ booking.get_status_display|lower }}.</p><a class="btn" href="{% url 'search' %}">Start again</a>{% endif %}</div>
+</div>{% endblock %}

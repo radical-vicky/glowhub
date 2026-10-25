@@ -1,0 +1,15 @@
+{% extends "core/staff_base.html" %}{% block dash %}
+<div><h1>Platform overview</h1><p class="mute" style="margin:2px 0 0">Health of the marketplace at a glance.</p></div>
+<div class="stats"><div class="card"><b>{{ providers }}</b><span class="mute">Total providers</span></div><div class="card"><b>{{ approved }}</b><span class="mute">Live and approved</span></div><div class="card"><b>{{ active_subs }}</b><span class="mute">Active subscriptions</span></div>
+{% if money %}<div class="card balance"><b>KSh {{ money.deposits|floatformat:0 }}</b><span class="mute">Deposits confirmed</span></div>{% endif %}</div>
+<div class="card"><h2>Needs attention</h2><div class="qa">
+  {% if pending_verifications is not None %}<a href="{% url 'staff_verifications' %}">{{ pending_verifications }} verification{{ pending_verifications|pluralize }} to review</a>{% endif %}
+  <a href="{% url 'admin:marketplace_business_changelist' %}?status__exact=PENDING">{{ pending_providers }} provider{{ pending_providers|pluralize }} awaiting approval</a>
+  <a href="{% url 'admin:support_supportticket_changelist' %}">{{ open_tickets }} open ticket{{ open_tickets|pluralize }}</a>
+  {% if money %}<a href="{% url 'admin:bookings_paymentattempt_changelist' %}">{{ money.recon }} payment{{ money.recon|pluralize }} to reconcile</a>
+  <a href="{% url 'admin:bookings_refund_changelist' %}?status__exact=REQUESTED">{{ money.refunds }} refund request{{ money.refunds|pluralize }}</a>
+  <a href="{% url 'admin:payouts_payout_changelist' %}?status__exact=REQUESTED">{{ money.payouts }} payout request{{ money.payouts|pluralize }}</a>
+  <a href="{% url 'admin:rewards_withdrawal_changelist' %}?status__exact=REQUESTED">{{ money.withdrawals }} withdrawal{{ money.withdrawals|pluralize }}</a>{% endif %}</div></div>
+<div class="card"><h2>Bookings, last 30 days</h2>{% for s in by_status %}<div class="barrow"><span>{{ s.status }}</span><div class="track"><div class="fill" style="width:{{ s.pct }}%"></div></div><b>{{ s.n }}</b></div>{% empty %}<p class="mute" style="margin:0">No bookings yet.</p>{% endfor %}</div>
+<div class="card"><h2>Recent activity</h2>{% for e in events %}<div class="li"><div class="grow"><strong>{{ e.action }}</strong><div class="mute">{{ e.actor|default:"System" }} · {{ e.target }}</div></div><span class="mute">{{ e.at|date:"j M, H:i" }}</span></div>{% empty %}<p class="mute" style="margin:0">Nothing yet.</p>{% endfor %}</div>
+{% endblock %}

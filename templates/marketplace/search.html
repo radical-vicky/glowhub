@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% load static %}{% block title %}Browse providers · GlowHub{% endblock %}{% block content %}
+<div class="sechead" style="margin-top:26px"><div><h1 style="margin:0">Find a provider</h1><p class="mute" style="margin:4px 0 0">{{ results|length }} result{{ results|length|pluralize }}</p></div></div>
+<form class="card filters" method="get" id="searchform"><input type="hidden" name="lat" value=""><input type="hidden" name="lng" value="">
+  <div><label for="f-q">Service or provider</label><input id="f-q" name="q" value="{{ q }}" placeholder="e.g. braids"></div>
+  <div><label for="f-a">Area</label><input id="f-a" name="area" value="{{ area }}" placeholder="e.g. Westlands"></div>
+  <div><label for="f-c">Category</label><select id="f-c" name="category"><option value="">All categories</option>{% for c in categories %}<option value="{{ c.slug }}" {% if c.slug == cat %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></div>
+  <div><label for="f-p">Max price (KSh)</label><input id="f-p" name="max_price" inputmode="numeric" value="{{ request.GET.max_price }}" placeholder="e.g. 3000"></div>
+  <div class="fbtns"><button>Apply filters</button><button type="button" class="btn ghost" id="nearme">Near me</button></div></form>
+<div class="cards">{% for b in results %}{% include "marketplace/_card.html" %}{% empty %}
+  <div class="card empty" style="grid-column:1/-1"><p><strong>No providers match.</strong><br>Try a wider area or fewer filters.</p><a class="btn ghost" href="{% url 'search' %}">Clear filters</a></div>{% endfor %}</div>
+<script src="{% static 'js/nearme.js' %}?v={{ ASSET_V }}"></script>{% endblock %}

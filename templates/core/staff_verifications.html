@@ -1,0 +1,6 @@
+{% extends "core/staff_base.html" %}{% load ui %}{% block dash %}
+<div><h1>Provider verification</h1><p class="mute" style="margin:2px 0 0">Check the ID and the selfie holding the code. Every view of a document is logged.</p></div>
+<div class="tabs">{% for t in tabs %}<a class="btn {% if t != status %}ghost{% endif %} small" href="?status={{ t }}">{{ t|title }}</a>{% endfor %}</div>
+<div class="card"><table><tr><th>Business</th><th>Owner</th><th>Document</th><th>Submitted</th><th>Status</th><th></th></tr>
+{% for v in rows %}<tr><td><strong>{{ v.business.name }}</strong></td><td class="mute">{{ v.business.owner.email }}</td><td>{{ v.get_doc_type_display }} ···{{ v.id_last4 }}</td><td>{{ v.submitted_at|date:"j M, H:i" }}</td><td><span class="pill {{ v.status|pillclass }}">{{ v.get_status_display }}</span></td><td><a class="btn small" href="{% url 'admin:verification_providerverification_change' v.pk %}">Review</a></td></tr>
+{% empty %}<tr><td colspan="6" class="mute">Nothing in this list.</td></tr>{% endfor %}</table></div>{% endblock %}

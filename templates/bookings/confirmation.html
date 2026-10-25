@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% load ui %}{% block robots %}<meta name="robots" content="noindex">{% endblock %}{% block content %}
+<div class="card success"><p style="margin:0"><span class="pill ok">Payment received</span></p>
+<h1 style="font-size:1.8rem;margin:0 0 6px">Booking confirmed!</h1><p class="mute">Your appointment has been confirmed. We've emailed the details.</p>
+<div class="card" style="text-align:left;margin-top:18px"><div class="shead">{% if booking.business.logo %}<img class="avatar" src="{{ booking.business.logo.url|cdn:'w_104,h_104,c_fill' }}" alt="">{% endif %}<div><strong>{{ booking.service_name }}</strong><div class="mute">{{ booking.business.name }}</div></div></div>
+<div class="sum"><div class="r"><span class="mute">When</span><span>{{ booking.start|date:"D j M Y, H:i" }}</span></div><div class="r"><span class="mute">Deposit paid</span><strong class="ok">KSh {{ booking.deposit_amount|floatformat:0 }}</strong></div><div class="r total"><span>Balance due at appointment</span><span>KSh {{ booking.balance|floatformat:0 }}</span></div></div></div>
+<div class="btnrow" style="justify-content:center"><a class="btn" href="{% url 'dashboard' %}">View my bookings</a><a class="btn ghost" href="{% url 'thread' booking.id %}">Message provider</a><a class="btn ghost" href="{% url 'home' %}">Back home</a></div></div>{% endblock %}

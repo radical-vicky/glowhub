@@ -1,0 +1,8 @@
+{% load ui %}<a class="pcard" href="{% url 'provider' b.slug %}">
+  <div class="cover">{% if b.cover_image %}<img src="{{ b.cover_image.url|cdn:'w_640,h_256,c_fill' }}" alt="" loading="lazy">{% else %}{% with ph=b.photos.all|first %}{% if ph %}<img src="{{ ph.image.url|cdn:'w_640,h_256,c_fill' }}" alt="" loading="lazy">{% endif %}{% endwith %}{% endif %}
+    {% if b.verified %}<span class="badge ok">Verified</span>{% endif %}{% if b.logo %}<img class="avatar" src="{{ b.logo.url|cdn:'w_104,h_104,c_fill' }}" alt="">{% endif %}</div>
+  <div class="pbody{% if b.logo %} lg{% endif %}"><strong>{{ b.name }}</strong>
+    <span class="mute">{{ b.area }}{% if b.distance is not None %} · {{ b.distance|floatformat:1 }} km{% endif %}</span>
+    <div class="meta"><span>{% if b.avg_rating %}Rated {{ b.avg_rating|floatformat:1 }} <span class="mute">({{ b.n_reviews }})</span>{% else %}<span class="mute">New</span>{% endif %}</span>
+      {% if b.from_price %}<span>From <strong>KSh {{ b.from_price|floatformat:0 }}</strong></span>{% endif %}</div></div>
+</a>

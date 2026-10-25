@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block robots %}<meta name="robots" content="noindex">{% endblock %}
+{% block content %}{% with u=request.resolver_match.url_name %}
+<div class="dash"><nav class="dnav" aria-label="Account">
+  {% if user.business %}
+  <a href="{% url 'dashboard' %}" {% if u == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
+  <a href="{% url 'provider_bookings' %}" {% if u == 'provider_bookings' %}aria-current="page"{% endif %}> Appointments</a>
+  <a href="{% url 'services' %}" {% if u == 'services' %}aria-current="page"{% endif %}> Services</a>
+  <a href="{% url 'team' %}" {% if u == 'team' %}aria-current="page"{% endif %}> Team &amp; branches</a>
+  <a href="{% url 'hours' %}"> Opening hours</a>
+  <a href="{% url 'photos' %}" {% if u == 'photos' %}aria-current="page"{% endif %}> Photos</a>
+  <a href="{% url 'inventory' %}" {% if u == 'inventory' %}aria-current="page"{% endif %}> Inventory</a>
+  <a href="{% url 'reports' %}" {% if u == 'reports' %}aria-current="page"{% endif %}> Reports</a>
+  <div class="sep"></div>
+  <a href="{% url 'earnings' %}" {% if u == 'earnings' %}aria-current="page"{% endif %}> Earnings</a>
+  <a href="{% url 'subscription' %}" {% if u == 'subscription' %}aria-current="page"{% endif %}> Plan</a>
+  <a href="{% url 'verification' %}"> Verification</a>
+  {% else %}<a href="{% url 'dashboard' %}" {% if u == 'dashboard' %}aria-current="page"{% endif %}> My bookings</a>{% endif %}
+  <div class="sep"></div>
+  <a href="{% url 'rewards' %}" {% if u == 'rewards' %}aria-current="page"{% endif %}> Rewards</a>
+  <a href="{% url 'tickets' %}" {% if u == 'tickets' %}aria-current="page"{% endif %}> Support</a>
+  <a href="{% url 'phone' %}"> Phone &amp; alerts</a>
+</nav><div class="dmain">{% block dash %}{% endblock %}</div></div>
+{% endwith %}{% endblock %}

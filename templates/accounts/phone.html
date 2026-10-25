@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block robots %}<meta name="robots" content="noindex">{% endblock %}{% block content %}
+<div class="card" style="max-width:520px;margin:30px auto"><h1 style="font-size:1.6rem">Phone number</h1>
+{% if error %}<div class="msg bad">{{ error }}</div>{% endif %}
+{% if p.phone_verified %}<p class="ok">Verified: {{ p.phone }}</p>{% elif stage == "enter" %}
+<form method="post">{% csrf_token %}<input type="hidden" name="action" value="send"><label>Safaricom number</label><input name="phone" placeholder="0712 345 678" required><p><button>Send code</button></p></form>
+{% else %}<form method="post">{% csrf_token %}<input type="hidden" name="action" value="verify"><label>6-digit code we texted you</label><input name="code" inputmode="numeric" maxlength="6" required><p><button>Verify</button></p></form>
+<form method="post">{% csrf_token %}<input type="hidden" name="action" value="restart"><button class="btn ghost">Use a different number</button></form>{% endif %}
+<h2 style="font-size:1.1rem">Notification preferences</h2><form method="post">{% csrf_token %}<input type="hidden" name="action" value="prefs">
+<label style="color:var(--text)"><input type="checkbox" name="sms" {% if p.sms_opt_in %}checked{% endif %} style="width:auto"> SMS for booking confirmations and reminders</label>
+<label style="color:var(--text)"><input type="checkbox" name="whatsapp" {% if p.whatsapp_opt_in %}checked{% endif %} style="width:auto"> WhatsApp for booking updates</label>
+<label style="color:var(--text)"><input type="checkbox" name="marketing" {% if p.marketing_opt_in %}checked{% endif %} style="width:auto"> Offers and promotions (optional)</label>
+<p><button class="btn ghost">Save preferences</button></p></form></div>{% endblock %}

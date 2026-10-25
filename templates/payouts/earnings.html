@@ -1,0 +1,7 @@
+{% extends "dash_base.html" %}{% load ui %}{% block dash %}
+<div class="row"><h1>Earnings</h1><a class="btn ghost" href="?format=csv">Download statement</a></div>
+<div class="stats"><div class="card balance"><b>KSh {{ bal.available|floatformat:0 }}</b>Available to withdraw</div><div class="card"><b>KSh {{ bal.pending|floatformat:0 }}</b>Held until after appointments</div></div>
+<p class="mute">Deposits are collected by GlowHub, a {{ fee }}% platform fee is deducted, and the rest is released {{ 24 }} hours after the appointment.</p>
+<div class="card" style="max-width:420px"><form method="post">{% csrf_token %}<label>Amount (min. KSh {{ min }})</label><input name="amount" inputmode="numeric" required><p class="mute">Paid to your verified phone number.</p><button>Request payout</button></form></div>
+<h2>Payouts</h2><div class="card"><table>{% for p in payouts %}<tr><td>{{ p.requested_at|date:"j M Y" }}</td><td>KSh {{ p.amount|floatformat:0 }}</td><td>{{ p.get_status_display }}</td><td class="mute">{{ p.receipt }}</td></tr>{% empty %}<tr><td class="mute">No payouts yet.</td></tr>{% endfor %}</table></div>
+<h2>Recent activity</h2><div class="card"><table>{% for e in ledger %}<tr><td>{{ e.created_at|date:"j M" }}</td><td>{{ e.note }}</td><td class="{% if e.amount < 0 %}warn{% else %}ok{% endif %}">{{ e.amount|floatformat:0 }}</td></tr>{% empty %}<tr><td class="mute">Nothing yet.</td></tr>{% endfor %}</table></div>{% endblock %}

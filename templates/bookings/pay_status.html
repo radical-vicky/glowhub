@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% load static %}{% block robots %}<meta name="robots" content="noindex">{% endblock %}{% block content %}
+<div class="card success"><div class="spin" aria-hidden="true"></div><h1 style="font-size:1.6rem;margin:0 0 6px">Check your phone</h1>
+<p class="mute">Enter your M-Pesa PIN to pay <strong class="accent">KSh {{ booking.deposit_amount|floatformat:0 }}</strong>. This page updates by itself.</p>
+{% if booking.status == 'EXPIRED' %}<p class="bad">The payment window closed.</p><a class="btn" href="{% url 'search' %}">Book again</a>{% else %}<p class="mute" style="margin:0">Waiting for payment…</p>{% endif %}</div>
+<script src="{% static 'js/paystatus.js' %}?v={{ ASSET_V }}"></script>{% endblock %}

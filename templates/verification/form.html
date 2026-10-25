@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% load static %}{% block robots %}<meta name="robots" content="noindex">{% endblock %}{% block content %}
+<div class="card" style="max-width:600px;margin:30px auto"><h1 style="font-size:1.6rem">Verify your identity</h1>
+{% if v and v.status == 'REJECTED' %}<div class="msg bad">Not approved: {{ v.reject_reason }}. Please resubmit.</div>{% endif %}
+<p class="mute">We check your ID and face to keep customers safe and stop fake accounts. Images are stored privately, seen only by trained reviewers, and deleted {{ 30 }} days after review. We keep only a one-way fingerprint of the document number.</p>
+<form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.non_field_errors }}
+{% for f in form.visible_fields %}{% if f.name == "selfie" %}<div class="card" style="margin:14px 0"><p><strong>Write {{ code }} on paper</strong> and hold it next to your face, in good light.</p>
+<video id="cam-video" autoplay playsinline hidden style="width:100%;border-radius:8px"></video><canvas id="cam-canvas" hidden style="width:100%;border-radius:8px"></canvas>
+<button type="button" class="btn ghost" id="cam-start">Use camera</button><button type="button" id="cam-snap" hidden>Capture</button></div>{% endif %}
+<label>{{ f.label }}</label>{{ f }}{{ f.errors }}{% endfor %}<p><button>Submit for review</button></p></form></div>
+<script src="{% static 'js/selfie.js' %}"></script>{% endblock %}

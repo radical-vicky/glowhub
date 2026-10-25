@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% load ui %}{% block robots %}<meta name="robots" content="noindex">{% endblock %}{% block content %}
+<p class="crumbs" style="margin:22px 0 0"><a href="{% url 'provider' b.slug %}">Back to {{ b.name }}</a></p>
+<h1 style="font-size:clamp(1.5rem,4vw,2.2rem);margin:.2em 0">Book your appointment</h1>
+<form method="post" class="twocol">{% csrf_token %}<input type="hidden" name="date" value="{{ day|date:'Y-m-d' }}">{% if branch %}<input type="hidden" name="branch" value="{{ branch.id }}">{% endif %}
+<div class="pmain">
+  <div class="card"><div class="shead">{% if b.logo %}<img class="avatar" src="{{ b.logo.url|cdn:'w_104,h_104,c_fill' }}" alt="">{% endif %}<div><strong style="font-size:1.1rem">{{ service.name }}</strong><div class="mute">{{ b.name }} · {{ service.duration_minutes }} min</div></div><strong class="accent" style="margin-left:auto">KSh {{ service.price|floatformat:0 }}</strong></div>{% if service.description %}<p class="mute" style="margin:12px 0 0">{{ service.description }}</p>{% endif %}</div>
+  {% if branches|length > 1 %}<div class="card"><h2>Branch</h2><div class="slots">{% for x in branches %}<a class="btn {% if x != branch %}ghost{% endif %}" href="?branch={{ x.id }}&date={{ day|date:'Y-m-d' }}">{{ x.name }} · {{ x.area }}</a>{% endfor %}</div></div>{% endif %}
+  <div class="card"><h2>Select date</h2><div class="dates">{% for d in days %}<a class="{% if d == day %}on{% endif %}" href="?date={{ d|date:'Y-m-d' }}{% if branch %}&branch={{ branch.id }}{% endif %}"><small>{{ d|date:"D" }}</small><b>{{ d|date:"j" }}</b><small>{{ d|date:"M" }}</small></a>{% endfor %}</div>
+  <h2 style="margin-top:22px">Available times</h2>{{ form.slot.errors }}<div class="slots">{% for s in slots %}<label><input type="radio" name="slot" value="{{ s|date:'c' }}" required><span>{{ s|time:"H:i" }}</span></label>{% empty %}<p class="mute" style="margin:0">{% if branches|length > 1 and not branch %}Choose a branch to see times.{% else %}No times left on this day. Try another date.{% endif %}</p>{% endfor %}</div></div>
+</div>
+<aside class="pside"><div class="card"><h2>Your details</h2>
+  <label for="{{ form.contact_name.id_for_label }}">Full name</label>{{ form.contact_name }}{{ form.contact_name.errors }}
+  <label for="{{ form.contact_phone.id_for_label }}">M-Pesa phone number</label>{{ form.contact_phone }}{{ form.contact_phone.errors }}
+  <label for="{{ form.notes.id_for_label }}">Special requests (optional)</label>{{ form.notes }}
+  <div class="sum"><div class="r"><span class="mute">Service price</span><span>KSh {{ service.price|floatformat:0 }}</span></div><div class="r"><span class="mute">Deposit today ({{ b.deposit_percent }}%)</span><strong class="accent">KSh {{ deposit|floatformat:0 }}</strong></div><div class="r total"><span>Balance at the salon</span><span>KSh {{ balance|floatformat:0 }}</span></div></div>
+  <p class="mute" style="margin:0;font-size:.9rem">{{ b.cancellation_policy }}</p>
+  <label class="chk">{{ form.agree }} <span>I agree to the cancellation policy</span></label>{{ form.agree.errors }}
+  <button class="block">Continue to payment</button></div></aside>
+</form>{% endblock %}

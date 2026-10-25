@@ -1,0 +1,5 @@
+{% extends "dash_base.html" %}{% load ui %}{% block dash %}
+<h1 style="font-size:1.5rem">#{{ t.id }} {{ t.subject }}</h1><p class="tag">{{ t.get_kind_display }} · {{ t.get_status_display }}{% if t.due_at %} · reply due {{ t.due_at|date:"j M" }}{% endif %}</p>
+<div class="card">{{ t.body|linebreaksbr }}</div>{% for r in t.replies.all %}<div class="card" style="margin-top:8px"><span class="mute">{{ r.author.get_username }} · {{ r.created_at|date:"j M, H:i" }}</span><br>{{ r.body|linebreaksbr }}</div>{% endfor %}
+{% if t.decision %}<div class="card" style="margin-top:8px;border-color:var(--ok)"><strong>Decision:</strong> {{ t.decision }}</div>{% endif %}
+{% if t.status != 'RESOLVED' %}<form method="post">{% csrf_token %}<textarea name="body" required placeholder="Add a reply"></textarea><p><button>Reply</button></p></form>{% endif %}{% endblock %}

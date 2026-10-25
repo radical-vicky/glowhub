@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% load ui %}{% block content %}
+<section class="hero">
+  <div>
+    <span class="eyebrow">Kenya's beauty &amp; wellness marketplace</span>
+    <h1>Beauty &amp; wellness services <span class="accent">near you</span></h1>
+    <p class="lead">Book trusted hair, nail, massage and makeup professionals. Pay a small deposit with M-Pesa and your slot is secured.</p>
+    <form class="search" action="{% url 'search' %}" role="search"><input name="q" placeholder="Search services or providers" aria-label="Service or provider"><input name="area" placeholder="Location, e.g. Nairobi" aria-label="Location"><button>Search</button></form>
+    <ul class="trust"><li>Verified providers</li><li>Deposit by M-Pesa</li><li>Easy rescheduling</li></ul>
+  </div>
+</section>
+
+<section class="section"><div class="sechead"><h2>Popular categories</h2><a href="{% url 'search' %}">View all</a></div>
+  <div class="cats">{% for c in categories %}<a class="card cat" href="{% url 'search' %}?category={{ c.slug }}">{% if c.image %}<img class="catimg" src="{{ c.image.url|cdn:'w_240,h_240,c_fill' }}" alt="" loading="lazy">{% endif %}<span>{{ c.name }}</span></a>{% empty %}<p class="mute">Categories appear after you run <code>python manage.py migrate</code>.</p>{% endfor %}</div></section>
+
+<section class="section"><div class="sechead"><h2>Featured providers</h2><a href="{% url 'search' %}">Browse all</a></div>
+  <div class="cards">{% for b in featured %}{% include "marketplace/_card.html" %}{% empty %}
+  <div class="card empty" style="grid-column:1/-1"><p><strong>No providers listed yet.</strong><br>Be the first to open your page on GlowHub.</p><a class="btn" href="{% url 'become_provider' %}">List your business</a></div>{% endfor %}</div></section>
+
+<section class="section"><div class="sechead"><h2>How it works</h2></div>
+  <div class="steps"><div class="card step"><div class="n">1</div><h3>Choose a service</h3><p>Search by service, area or price and compare verified providers.</p></div>
+  <div class="card step"><div class="n">2</div><h3>Book a time</h3><p>See real availability and pick the slot that suits you.</p></div>
+  <div class="card step"><div class="n">3</div><h3>Pay the deposit</h3><p>Confirm with M-Pesa. Pay the balance at your appointment.</p></div></div></section>
+
+<section class="section"><div class="band"><div><h2>Grow your beauty business</h2><p>Get your own page, online bookings, deposits and reminders.</p></div><a class="btn" href="{% url 'become_provider' %}">Become a provider</a></div></section>
+{% endblock %}

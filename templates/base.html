@@ -1,0 +1,35 @@
+{% load static ui %}<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{% block title %}GlowHub{% endblock %}</title><link rel="icon" href="data:,">
+<script src="{% static 'js/theme.js' %}?v={{ ASSET_V }}"></script>
+{% block robots %}{% endblock %}<link rel="stylesheet" href="{% static 'css/app.css' %}?v={{ ASSET_V }}"></head><body class="{% if SITE.background_image %}has-bg{% endif %}"{% if SITE.background_image %} style="--bg-image:url('{{ SITE.background_image.url|cdn:'w_1920,c_limit' }}');--scrim-a:{{ SITE.overlay_percent }}%"{% endif %}>
+{% with u=request.resolver_match.url_name %}
+<header class="site"><div class="wrap bar">
+  <button class="chip burger" id="burger" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+  <a class="logo" href="{% url 'home' %}">Glow<b>Hub</b></a>
+  <form class="hsearch" action="{% url 'search' %}" role="search"><input name="q" type="search" placeholder="Search services, providers and more" aria-label="Search"></form>
+  <div class="actions"><button class="chip" id="theme" type="button" aria-label="Switch light or dark theme">Theme</button>
+    <a class="chip acct" href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'account_login' %}{% endif %}">{% if user.is_authenticated %}Account{% else %}Log in{% endif %}</a></div></div>
+  <nav class="links" id="menu" aria-label="Main"><div class="wrap">
+    <a href="{% url 'home' %}" {% if u == 'home' %}aria-current="page"{% endif %}>Home</a>
+    <a href="{% url 'search' %}" {% if u == 'search' %}aria-current="page"{% endif %}>Browse</a>
+    <a href="{% url 'become_provider' %}">For providers</a>
+    {% if user.is_authenticated %}
+    {% if user.is_staff %}<a href="{% url 'staff' %}">Staff</a>{% endif %}
+    <a href="{% url 'dashboard' %}" {% if u == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
+    {% if user.business %}<a href="{% url 'provider_bookings' %}">Appointments</a><a href="{% url 'earnings' %}">Earnings</a>{% endif %}
+    <a href="{% url 'rewards' %}" {% if u == 'rewards' %}aria-current="page"{% endif %}>Rewards</a>
+    <a href="{% url 'tickets' %}">Support</a>
+    <form method="post" action="{% url 'account_logout' %}">{% csrf_token %}<button class="linkbtn" type="submit">Log out</button></form>
+    {% else %}<a href="{% url 'account_login' %}">Log in</a><a class="btn small" href="{% url 'account_signup' %}">Sign up</a>{% endif %}
+  </div></nav>
+</header>
+{% endwith %}
+<main class="wrap {% block mainclass %}{% endblock %}">
+{% for m in messages %}<div class="msg">{{ m }}</div>{% endfor %}{% block content %}{% endblock %}</main>
+<footer class="site-foot"><div class="wrap foot">
+  <div><a class="logo" href="{% url 'home' %}">Glow<b>Hub</b></a><p class="mute">Book trusted beauty and wellness professionals across Kenya.</p></div>
+  <div class="foot-links"><a href="{% url 'search' %}">Browse</a><a href="{% url 'become_provider' %}">For providers</a><a href="{% url 'tickets' %}">Support</a></div>
+  <div class="foot-links"><a href="/legal/privacy/">Privacy</a><a href="/legal/terms/">Terms</a><a href="/legal/cancellation/">Cancellation &amp; refunds</a></div>
+</div></footer>
+<script src="{% static 'js/app.js' %}?v={{ ASSET_V }}"></script></body></html>

@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block robots %}<meta name="robots" content="noindex">{% endblock %}
+{% block content %}{% with u=request.resolver_match.url_name %}
+<div class="dash"><nav class="dnav" aria-label="Staff">
+  <a href="{% url 'staff' %}" {% if u == 'staff' %}aria-current="page"{% endif %}> Overview</a>
+  <a href="{% url 'staff_verifications' %}" {% if u == 'staff_verifications' %}aria-current="page"{% endif %}> Verifications</a>
+  <a href="{% url 'admin:marketplace_business_changelist' %}"> Providers</a>
+  <a href="{% url 'admin:bookings_booking_changelist' %}"> Bookings</a>
+  <a href="{% url 'admin:bookings_paymentattempt_changelist' %}"> Payments</a>
+  <a href="{% url 'admin:bookings_refund_changelist' %}"> Refunds</a>
+  <a href="{% url 'admin:payouts_payout_changelist' %}"> Payouts</a>
+  <a href="{% url 'admin:rewards_withdrawal_changelist' %}"> Withdrawals</a>
+  <a href="{% url 'admin:subscriptions_subscription_changelist' %}"> Subscriptions</a>
+  <a href="{% url 'admin:support_supportticket_changelist' %}"> Support</a>
+  <div class="sep"></div>
+  <a href="{% url 'admin:core_auditevent_changelist' %}"> Audit log</a>
+  <a href="{% url 'admin:index' %}"> Full admin</a>
+</nav><div class="dmain">{% block dash %}{% endblock %}</div></div>
+{% endwith %}{% endblock %}

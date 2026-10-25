@@ -1,0 +1,5 @@
+{% extends "dash_base.html" %}{% block dash %}
+<div><h1>Messages</h1><p class="mute" style="margin:2px 0 0">{{ b.service_name }} · {{ b.start|date:"D j M, H:i" }}</p></div>
+<div class="card"><div class="chat">{% for m in messages_list %}<div class="bubble {% if m.sender == user %}me{% endif %}"><small>{% if m.sender == b.customer %}{{ b.contact_name }}{% else %}{{ b.business.name }}{% endif %} · {{ m.created_at|date:"j M, H:i" }}</small>{{ m.body|linebreaksbr }}
+{% if m.sender != user and not m.reported %}<form method="post" action="{% url 'report_message' m.id %}" style="margin-top:6px">{% csrf_token %}<button class="btn ghost small">Report</button></form>{% endif %}</div>{% empty %}<p class="mute" style="margin:0">No messages yet. Say hello </p>{% endfor %}</div></div>
+<form method="post" class="card">{% csrf_token %}<textarea name="body" maxlength="1000" required placeholder="Write a message"></textarea><p><button>Send</button></p></form>{% endblock %}

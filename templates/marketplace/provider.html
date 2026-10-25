@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load ui %}{% block title %}{{ b.name }} · GlowHub{% endblock %}{% block content %}
+{% if b.cover_image %}<div class="banner"><img src="{{ b.cover_image.url|cdn:'w_1600,h_440,c_fill' }}" alt=""></div>{% endif %}
+<section class="phero">{% if b.logo %}<img class="avatar big" src="{{ b.logo.url|cdn:'w_160,h_160,c_fill' }}" alt="">{% endif %}
+  <div><h1>{{ b.name }}</h1><p class="mute" style="margin:6px 0 0">{{ b.area }} · {% if b.avg_rating %}Rated {{ b.avg_rating|floatformat:1 }} ({{ b.n_reviews }} review{{ b.n_reviews|pluralize }}){% else %}New on GlowHub{% endif %} {% if b.verified %}<span class="badge ok">Verified</span>{% endif %}</p></div></section>
+<div class="pgrid"><div class="pmain">
+  {% if b.photos.all %}<div class="gallery">{% for p in b.photos.all %}<img src="{{ p.image.url|cdn:'w_480,h_260,c_fill' }}" alt="{{ p.caption|default:'Photo of '|add:b.name }}" loading="lazy">{% endfor %}</div>{% endif %}
+  {% if b.description %}<div class="card"><h2>About</h2><p style="margin:0">{{ b.description|linebreaksbr }}</p></div>{% endif %}
+  {% if b.branches.all|length > 1 %}<div class="card"><h2>Branches</h2>{% for x in b.branches.all %}{% if x.is_active %}<div class="row"><span>{{ x.name }}</span><span class="mute">{{ x.area }}</span></div>{% endif %}{% endfor %}</div>{% endif %}
+  <div class="card"><h2>Services</h2>{% for s in services %}<div class="svc"><div><strong>{{ s.name }}</strong><div class="mute">{{ s.duration_minutes }} min{% if s.description %} · {{ s.description|truncatechars:70 }}{% endif %}</div></div><span class="price">KSh {{ s.price|floatformat:0 }}</span><a class="btn" href="{% url 'book' s.id %}">Book now</a></div>{% empty %}<p class="mute" style="margin:0">No services listed yet.</p>{% endfor %}</div>
+  <div class="card"><h2>Reviews</h2>{% for r in reviews %}<div class="svc" style="display:block"><span>{{ r.rating }}/5</span> <span class="mute">{{ r.created_at|date:"j M Y" }}</span><p style="margin:6px 0 0">{{ r.comment }}</p>{% if r.provider_reply %}<p class="mute" style="margin:6px 0 0"><strong>Reply from {{ b.name }}:</strong> {{ r.provider_reply }}</p>{% endif %}</div>{% empty %}<p class="mute" style="margin:0">No reviews yet.</p>{% endfor %}</div>
+</div>
+<aside class="pside">
+  <div class="card"><h2>Deposit &amp; cancellation</h2><p style="margin:0 0 8px">A <strong>{{ b.deposit_percent }}%</strong> deposit is paid by M-Pesa when you book.</p><p class="mute" style="margin:0">{{ b.cancellation_policy }}</p></div>
+  <div class="card"><h2>Opening hours</h2><ul class="hours">{% for h in hours %}<li><span>{{ h.get_weekday_display }}</span><span>{{ h.opens|time:"H:i" }} – {{ h.closes|time:"H:i" }}</span></li>{% empty %}<li class="mute">Hours not set yet.</li>{% endfor %}</ul></div>
+  {% if map %}<div class="card"><h2>Location</h2><iframe title="Map" src="{{ map.embed }}" style="width:100%;height:220px;border:0;border-radius:12px" loading="lazy"></iframe><p style="margin:12px 0 0"><a class="btn ghost" href="{{ map.directions }}" rel="noopener" target="_blank">Get directions</a></p></div>{% endif %}
+</aside></div>
+{% endblock %}

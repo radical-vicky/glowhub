@@ -1,0 +1,4 @@
+{% extends "dash_base.html" %}{% load ui %}{% block dash %}<div class="row"><h1>Reports</h1><a class="btn ghost" href="?format=csv">Export CSV</a></div>
+<div class="stats"><div class="card"><b>{{ total }}</b>Bookings</div><div class="card"><b>KSh {{ deposits_confirmed|floatformat:0 }}</b>Deposits confirmed</div><div class="card"><b>KSh {{ deposits_pending|floatformat:0 }}</b>Deposits pending (not revenue)</div></div>
+<h2>By status</h2><div class="card"><table>{% for s in by_status %}<tr><td>{{ s.status }}</td><td>{{ s.n }}</td></tr>{% endfor %}</table></div>
+<h2>Popular services</h2><div class="card"><table>{% for s in by_service %}<tr><td>{{ s.service_name }}</td><td>{{ s.n }}</td></tr>{% empty %}<tr><td class="mute">No completed bookings yet.</td></tr>{% endfor %}</table></div>{% endblock %}
